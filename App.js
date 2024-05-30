@@ -6,11 +6,13 @@ import Animated, { interpolateColor, useAnimatedStyle, useDerivedValue, withTimi
 const Colors = {
   dark: {
     background: '#1E1E1E',
-    circle:'#252525'
+    circle:'#252525',
+    text:'#F8F8F8'
   },
   light: {
     background: '#F8F8F8',
-    circle:'#FFF'
+    circle:'#FFF',
+    text:'#1E1E1E'
   }
 }
 
@@ -46,8 +48,24 @@ export default function App() {
     return { backgroundColor };
   })
 
+  const rStyleText = useAnimatedStyle(() => {
+    const color = interpolateColor(
+      progress.value,
+      [0, 1],
+      [Colors.light.text, Colors.dark.text]
+    )
+
+    const backgroundColor = interpolateColor(
+      progress.value,
+      [0, 1],
+      [Colors.light.background, Colors.dark.background]
+    )
+    return { color,backgroundColor };
+  })
+
   return (
     <Animated.View style={[styles.container, rStyle]}>
+    <Animated.Text style={[styles.text,rStyleText]} >Theme</Animated.Text>
       <Animated.View style={[styles.circle,rStyleCircle]} >
         <Switch
           value={theme === 'dark'}
@@ -85,5 +103,12 @@ const styles = StyleSheet.create({
     shadowOpacity:0.1,
     shadowRadius:10,
     elevation:8
+  },
+  text:{
+    fontSize:70,
+    textTransform:"uppercase",
+    fontWeight:"700",
+    letterSpacing:14,
+    marginBottom:30
   }
 });
